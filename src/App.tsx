@@ -76,37 +76,40 @@ function App() {
     });
 
     const removeTodolist = (todolistId: string) => {
-        setTodolists(todolists.filter(el => el.id !== todolistId))
+        setTodolists((prevState) => (prevState.filter(el => el.id !== todolistId)))
         delete tasks[todolistId]
         console.log(tasks)
     }
 
     function removeTask(todolistId: string, taskId: string) {
-        setTasks({
-            ...tasks,
-            [todolistId]: {...tasks[todolistId], data: tasks[todolistId].data.filter(el => el.id !== taskId)}
-        })
+        setTasks((prevState) => ({
+            ...prevState,
+            [todolistId]: {...prevState[todolistId], data: prevState[todolistId].data.filter(el => el.id !== taskId)}
+        }))
     }
 
     function addTask(todolistId: string, title: string) {
         let newTask = {id: v1(), title: title, isDone: false};
-        setTasks({...tasks, [todolistId]: {...tasks[todolistId], data: [newTask, ...tasks[todolistId].data]}})
+        setTasks((prevState) => ({
+            ...prevState,
+            [todolistId]: {...prevState[todolistId], data: [newTask, ...prevState[todolistId].data]}
+        }))
         // let newTasks = [task, ...tasks];
         // setTasks(newTasks);
     }
 
     function changeStatus(todolistId: string, taskId: string, newIsDone: boolean) {
-        setTasks({
-            ...tasks,
+        setTasks((prevState) => ({
+            ...prevState,
             [todolistId]: {
-                ...tasks[todolistId],
-                data: tasks[todolistId].data.map(m => m.id === taskId ? {...m, isDone: newIsDone} : m)
+                ...prevState[todolistId],
+                data: prevState[todolistId].data.map(m => m.id === taskId ? {...m, isDone: newIsDone} : m)
             }
-        })
+        }))
     }
 
     function changeFilter(todolistId: string, value: FilterValuesType) {
-        setTasks({...tasks, [todolistId]: {...tasks[todolistId], filter: value}})
+        setTasks((prevState) => ({...prevState, [todolistId]: {...prevState[todolistId], filter: value}}))
     }
 
     return (
